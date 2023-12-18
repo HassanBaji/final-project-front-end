@@ -1,0 +1,25 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-testreactnativeproje-dev-03150-authRole",
+      "UnauthRoleArn": "arn:aws:iam::873992050606:role/amplify-testreactnativeproje-dev-03150-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::873992050606:role/amplify-testreactnativeproje-dev-03150-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-testreactnativeproje-dev-03150-deployment",
+      "UnauthRoleName": "amplify-testreactnativeproje-dev-03150-unauthRole",
+      "StackName": "amplify-testreactnativeproje-dev-03150",
+      "StackId": "arn:aws:cloudformation:us-east-1:873992050606:stack/amplify-testreactnativeproje-dev-03150/defd9060-9935-11ee-a8b6-0a589d2f919d",
+      "AmplifyAppId": "d3gxf59wrs4qes"
+    },
+    "categories": {
+      "auth": {
+        "testreactnativeproje4aaede18": {
+          "userPoolId": "us-east-1_5fs3FCtVx",
+          "userPoolName": "dev-football-group-management-user-pool",
+          "webClientId": "7mjf2g0leismolk3730a7gvgaf",
+          "nativeClientId": "7mjf2g0leismolk3730a7gvgaf"
+        }
+      }
+    }
+  }
+}

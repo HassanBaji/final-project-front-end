@@ -8,6 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -24,6 +25,34 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import {
+  useAuthenticator,
+  Authenticator,
+  ThemeProvider,
+  useTheme,
+} from '@aws-amplify/ui-react-native';
+import {signUp, SignUpInput} from 'aws-amplify/auth';
+import {createPlayer} from './src/hooks';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {MainStack} from './src/navigation/MainStack';
+
+const userSelector = context => [context.user];
+
+const {req: createPlayerRequest} = createPlayer();
+const Stack = createNativeStackNavigator();
+
+const SignOutButton = () => {
+  const {user, signOut} = useAuthenticator(userSelector);
+  return (
+    <Pressable onPress={signOut} style={styles.buttonContainer}>
+      <Text style={styles.buttonText}>
+        Hello, {user.userId}! Click here to sign out!
+      </Text>
+    </Pressable>
+  );
+};
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -63,36 +92,78 @@ function App(): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+    <NavigationContainer>
+      <Authenticator.Provider>
+        <Authenticator
+          // render override SignIn subcomponent
+
+          components={{
+            SignUp: ({fields, ...props}) => (
+              <Authenticator.SignUp
+                {...props}
+                fields={[
+                  {
+                    name: 'custom:first_name',
+                    label: 'First name',
+                    type: 'default',
+                    placeholder: 'Enter your first name',
+                    required: true,
+                  },
+                  {
+                    name: 'custom:last_name',
+                    label: 'Last name',
+                    type: 'default',
+                    placeholder: 'Enter your last name',
+                    required: true,
+                  },
+                  {
+                    name: 'custom:phone',
+                    label: 'phone',
+                    type: 'phone',
+                    placeholder: 'Enter your email',
+                    required: true,
+                  },
+
+                  ...fields,
+                ]}
+              />
+            ),
+          }}
+          services={{
+            handleSignUp: async ({
+              username,
+              password,
+              options,
+            }: SignUpInput) => {
+              console.log('options: ' + JSON.stringify(options));
+              await createPlayerRequest({
+                fName: options?.userAttributes['custom:first_name'] ?? '',
+                lName: options?.userAttributes['custom:last_name'] ?? '',
+                email: options?.userAttributes.email ?? '',
+                phone: options?.userAttributes['custom:phone'] ?? '',
+              });
+
+              return signUp({
+                username: username.toLowerCase(),
+                password,
+                options: {
+                  ...options,
+                  userAttributes: {
+                    ...options?.userAttributes,
+                    email: options?.userAttributes?.email?.toLowerCase(),
+                  },
+                },
+              });
+            },
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          {/* <Stack.Navigator>
+            <Stack.Screen name="Home" component={HomeScreen} />
+          </Stack.Navigator> */}
+
+          <MainStack />
+        </Authenticator>
+      </Authenticator.Provider>
+    </NavigationContainer>
   );
 }
 
@@ -113,6 +184,12 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: '700',
   },
+  buttonContainer: {
+    alignSelf: 'center',
+    backgroundColor: 'black',
+    paddingHorizontal: 8,
+  },
+  buttonText: {color: 'white', padding: 16, fontSize: 18},
 });
 
 export default App;

@@ -1,0 +1,10 @@
+{
+  "API": {
+    "endpoints": [
+      {
+        "name": "myApi",
+        "endpoint": "https://qsiaoi81z9.execute-api.us-east-1.amazonaws.com/dev/v1"
+      }
+    ]
+  }
+}
