@@ -1,1 +1,1 @@
-export {createPlayer} from './createPlayer';
+export {createPlayer} from './Players/createPlayer';

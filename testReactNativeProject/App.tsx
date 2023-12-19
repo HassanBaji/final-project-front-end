@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   Pressable,
@@ -26,13 +26,14 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import Auth from '@aws-amplify/auth';
 import {
   useAuthenticator,
   Authenticator,
   ThemeProvider,
   useTheme,
 } from '@aws-amplify/ui-react-native';
-import {signUp, SignUpInput} from 'aws-amplify/auth';
+import {signUp, SignUpInput, fetchAuthSession} from 'aws-amplify/auth';
 import {createPlayer} from './src/hooks';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -85,12 +86,21 @@ function Section({children, title}: SectionProps): JSX.Element {
 }
 
 function App(): JSX.Element {
+  const myToken = async () => {
+    try {
+      console.log((await fetchAuthSession()).tokens);
+    } catch (e) {
+      console.log('errors ' + e);
+    }
+  };
+
+  myToken();
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
   return (
     <NavigationContainer>
       <Authenticator.Provider>
@@ -158,6 +168,7 @@ function App(): JSX.Element {
           }}>
           {/* <Stack.Navigator>
             <Stack.Screen name="Home" component={HomeScreen} />
+
           </Stack.Navigator> */}
 
           <MainStack />
