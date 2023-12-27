@@ -1,10 +1,10 @@
 import axios from 'axios';
-import {createPlayerReq} from '../../../Interfaces';
+import {CreatePlayerReq} from '../../Interfaces';
 
 export const createPlayer = () => {
-  const req = async (props: createPlayerReq) => {
+  const req = async (props: CreatePlayerReq) => {
     try {
-      const posting = await axios.post(
+      await axios.post(
         'https://qsiaoi81z9.execute-api.us-east-1.amazonaws.com/dev/v1/players',
         {
           ...props,

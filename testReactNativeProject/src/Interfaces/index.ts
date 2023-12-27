@@ -1,1 +1,1 @@
-export {createPlayerReq} from './interfaces';
+export {CreatePlayerReq} from './interfaces';

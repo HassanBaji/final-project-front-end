@@ -1,0 +1,1 @@
+export {GroupDetailsScreen} from './GroupDetailsScreen';
