@@ -25,7 +25,25 @@ export interface CreateGameReq {
   timeFinish: string;
   date: string;
   location: string;
-  limit: int;
+  limit: number;
+}
+
+export interface CreateTeamsReq {
+  teams: {
+    team1: {
+      playedId_gameId: {
+        playedId: string;
+        gameId: string;
+      };
+    }[];
+    team2: {
+      playedId_gameId: {
+        playedId: string;
+        gameId: string;
+      };
+    }[];
+  };
+  gameId: string;
 }
 
 export interface SendInviteReq {
@@ -76,4 +94,14 @@ export interface Game {
   PlayerInGames: {player: Player; goalsScored: string}[];
   Group: {name: string; playerId: string};
   limit: string;
+  Team: Team[];
+}
+
+export interface Team {
+  player: {
+    player: Player;
+    goalsScored: string;
+  }[];
+  winner: boolean;
+  name: string;
 }

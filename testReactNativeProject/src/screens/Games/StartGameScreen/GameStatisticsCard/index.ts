@@ -1,0 +1,1 @@
+export {GameStatisticsCard} from './GameStatisticsScreen';

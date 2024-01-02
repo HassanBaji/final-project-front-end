@@ -14,12 +14,13 @@ import {useGroups} from '../../../core/hooks/groups';
 import {Game, Group, Player} from '../../../Interfaces/interfaces';
 import DatePicker from 'react-native-date-picker';
 import RNPickerSelect from 'react-native-picker-select';
-import {createGame} from '../../../core/actions/games';
+import {createGame, createTeam} from '../../../core/actions/games';
 import {PlayersCardSmall} from './PlayersCardSmall';
 import {PlayersCardSmallSelected} from './PlayersCardSmallSelected';
 
 export const MakeTeamScreen = () => {
   const {player} = usePlayerStore();
+  const {refetch: refetchGroups} = useGroups(player.id);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const route = useRoute();
@@ -31,7 +32,7 @@ export const MakeTeamScreen = () => {
   const showToast = () => {
     Toast.show({
       type: 'success',
-      text1: 'Game created succefully',
+      text1: 'Team created succefully',
     });
   };
 
@@ -90,6 +91,45 @@ export const MakeTeamScreen = () => {
     );
 
     setRightTeam(newRightTeam);
+  };
+
+  const onClickCreateTeam = async () => {
+    if (
+      !leftTeam ||
+      !rightTeam ||
+      leftTeam.length <= 0 ||
+      rightTeam.length <= 0
+    ) {
+      showToastNotCompleted();
+    } else {
+      console.log('length right ' + rightTeam.length);
+      const team1 = leftTeam.map(player => ({
+        playedId_gameId: {
+          playedId: player.id,
+          gameId: game.id,
+        },
+      }));
+
+      const team2 = rightTeam.map(player => ({
+        playedId_gameId: {
+          playedId: player.id,
+          gameId: game.id,
+        },
+      }));
+      const teams = {
+        team1: team1,
+        team2: team2,
+      };
+      try {
+        await createTeam({teams: teams, gameId: game.id});
+        navigation.navigate('GamesScreen');
+        await refetchGroups();
+        showToast();
+      } catch (e) {
+        showToastError();
+        console.log(e);
+      }
+    }
   };
 
   return (
@@ -184,7 +224,8 @@ export const MakeTeamScreen = () => {
               borderRadius: 8,
               position: 'absolute',
             }}
-            disabled={loading}>
+            disabled={loading}
+            onPress={onClickCreateTeam}>
             {loading ? (
               <ActivityIndicator style={{padding: 10}} color={'white'} />
             ) : (

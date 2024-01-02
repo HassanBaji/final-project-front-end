@@ -167,6 +167,12 @@ export const GamesDetailsScreen = () => {
     });
   }, [joinGameButton, navigations]);
 
+  const startGameButtonClicked = () => {
+    navigations.navigate('StartGameScreen', {
+      game: game,
+    });
+  };
+
   return (
     <View style={{flex: 1}}>
       <View style={{margin: 16, marginTop: 124}}>
@@ -177,45 +183,96 @@ export const GamesDetailsScreen = () => {
             ({game.PlayerInGames.length} player)
           </Text>
         </Text>
-        <ScrollView style={{marginTop: 4}}>
-          {game.PlayerInGames &&
-            game.PlayerInGames.length > 0 &&
-            game.PlayerInGames.map(gamePlayer => (
-              <PlayersCard player={gamePlayer.player} />
-            ))}
-        </ScrollView>
+        {game.Team && game.Team.length > 0 ? (
+          <View style={{marginTop: 8}}>
+            {game.Team.map(team => {
+              return (
+                <View>
+                  <Text
+                    style={{fontSize: 12, fontWeight: 'bold', marginBottom: 8}}>
+                    {team.name}
+                  </Text>
+                  <ScrollView>
+                    {team.player.map(player => (
+                      <PlayersCard player={player.player} />
+                    ))}
+                  </ScrollView>
+                </View>
+              );
+            })}
+          </View>
+        ) : (
+          <ScrollView style={{marginTop: 4}}>
+            {game.PlayerInGames &&
+              game.PlayerInGames.length > 0 &&
+              game.PlayerInGames.map(gamePlayer => (
+                <PlayersCard player={gamePlayer.player} />
+              ))}
+          </ScrollView>
+        )}
       </View>
-      <View
-        style={{
-          position: 'absolute',
-          width: '100%',
-          bottom: 10,
-          alignItems: 'center',
-        }}>
-        <Button
+      {isOwner && game.Team.length <= 0 && (
+        <View
           style={{
-            fontSize: 18,
-            color: 'white',
-            padding: 10,
-          }}
-          containerStyle={{
-            backgroundColor: 'green',
-            width: '95%',
-            borderRadius: 8,
-          }}
-          disabled={loading}
-          onPress={() => {
-            navigations.navigate('MakeTeamScreen', {
-              game: game,
-            });
+            position: 'absolute',
+            width: '100%',
+            bottom: 10,
+            alignItems: 'center',
           }}>
-          {loading ? (
-            <ActivityIndicator style={{padding: 10}} color={'white'} />
-          ) : (
-            'Make teams'
-          )}
-        </Button>
-      </View>
+          <Button
+            style={{
+              fontSize: 18,
+              color: 'white',
+              padding: 10,
+            }}
+            containerStyle={{
+              backgroundColor: 'green',
+              width: '95%',
+              borderRadius: 8,
+            }}
+            disabled={loading}
+            onPress={() => {
+              navigations.navigate('MakeTeamScreen', {
+                game: game,
+              });
+            }}>
+            {loading ? (
+              <ActivityIndicator style={{padding: 10}} color={'white'} />
+            ) : (
+              'Make teams'
+            )}
+          </Button>
+        </View>
+      )}
+      {isOwner && game.Team.length > 0 && (
+        <View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            bottom: 10,
+            alignItems: 'center',
+          }}>
+          <Button
+            style={{
+              fontSize: 18,
+              color: 'white',
+              padding: 10,
+            }}
+            containerStyle={{
+              backgroundColor: 'green',
+              width: '95%',
+              borderRadius: 8,
+            }}
+            disabled={loading}
+            onPress={startGameButtonClicked}>
+            {loading ? (
+              <ActivityIndicator style={{padding: 10}} color={'white'} />
+            ) : (
+              'Start game'
+            )}
+          </Button>
+        </View>
+      )}
     </View>
   );
 };

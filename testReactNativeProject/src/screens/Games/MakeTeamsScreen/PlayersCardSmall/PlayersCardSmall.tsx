@@ -16,7 +16,6 @@ export const PlayersCardSmall = ({
 }: PlayersCardSmallProps) => {
   const pan = useRef(new Animated.ValueXY()).current;
   const opacity = useRef(new Animated.Value(1)).current;
-  const [showDraggable, setShowDraggable] = useState(true);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -50,11 +49,11 @@ export const PlayersCardSmall = ({
   );
 
   const isDropAreaLeft = gesture => {
-    return gesture.moveY > 400 && gesture.moveX < 200;
+    return gesture.moveY > 250 && gesture.moveX < 200;
   };
 
   const isDropAreaRight = gesture => {
-    return gesture.moveY > 400 && gesture.moveX > 200;
+    return gesture.moveY > 250 && gesture.moveX > 200;
   };
   return (
     <Animated.View

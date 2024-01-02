@@ -15,6 +15,7 @@ import {GamesScreen} from '../screens/Games/GamesScreen';
 import {CreateGameScreen} from '../screens/Games/CreateGamesScreen';
 import {GamesDetailsScreen} from '../screens/Games/GamesDetailsScreen';
 import {MakeTeamScreen} from '../screens/Games/MakeTeamsScreen';
+import {StartGameScreen} from '../screens/Games/StartGameScreen';
 
 const GamesRootStack = createStackNavigator();
 
@@ -91,6 +92,17 @@ export const GamesStack = () => {
         component={MakeTeamScreen}
         options={({route}) => ({
           title: `${route.params.game.Group.name} Game teams`,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {fontSize: 18, fontWeight: 'bold'},
+          headerShown: true,
+          // headerRight: () => <Button title="Update count" />,
+        })}
+      />
+      <GamesRootStack.Screen
+        name="StartGameScreen"
+        component={StartGameScreen}
+        options={({route}) => ({
+          title: `${route.params.game.Group.name} Game start`,
           headerTitleAlign: 'center',
           headerTitleStyle: {fontSize: 18, fontWeight: 'bold'},
           headerShown: true,
