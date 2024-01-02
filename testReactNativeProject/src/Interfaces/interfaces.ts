@@ -14,12 +14,18 @@ export interface CreateGroupReq {
   mime: string;
 }
 
+export interface JoinGameReq {
+  playerId: string;
+  gameId: string;
+}
+
 export interface CreateGameReq {
   groupId: string;
   timeStart: string;
   timeFinish: string;
   date: string;
   location: string;
+  limit: int;
 }
 
 export interface SendInviteReq {
@@ -58,15 +64,16 @@ export interface Invite {
 }
 
 export interface Game {
-  id: String;
+  id: string;
   date: string;
-  location: String;
+  location: string;
   gameFinish: Boolean;
   timeFinish: string;
   timeStart: string;
   goalsScored: number;
   PlayerInGroup: {player: Player}[];
-  groupId: String;
-  PlayerInGames: {player: Player}[];
-  Group: {name: string};
+  groupId: string;
+  PlayerInGames: {player: Player; goalsScored: string}[];
+  Group: {name: string; playerId: string};
+  limit: string;
 }

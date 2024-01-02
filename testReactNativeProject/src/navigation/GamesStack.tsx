@@ -3,7 +3,7 @@ import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import {HomeScreen} from '../screens/Home/HomeScreen';
 import {TabBar} from '../componenets/TabBar/TabBar';
 import {GroupScreen} from '../screens/Groups/GroupScreen/GroupScreen';
-import {Platform, Pressable, Text, View} from 'react-native';
+import {Button, Platform, Pressable, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconMaterial from 'react-native-vector-icons/MaterialIcons';
 import {horizontalNavOption, isRTL} from '../helpers';
@@ -13,6 +13,8 @@ import {GroupDetailsScreen} from '../screens/Groups/GroupDetailsScreen';
 import {InvitePlayersScreen} from '../screens/Groups/InvitePlayersScreen';
 import {GamesScreen} from '../screens/Games/GamesScreen';
 import {CreateGameScreen} from '../screens/Games/CreateGamesScreen';
+import {GamesDetailsScreen} from '../screens/Games/GamesDetailsScreen';
+import {MakeTeamScreen} from '../screens/Games/MakeTeamsScreen';
 
 const GamesRootStack = createStackNavigator();
 
@@ -72,6 +74,28 @@ export const GamesStack = () => {
           headerTitleStyle: {fontSize: 18, fontWeight: 'bold', marginLeft: -24},
           headerShown: true,
         }}
+      />
+      <GamesRootStack.Screen
+        name="GamesDetailsScreen"
+        component={GamesDetailsScreen}
+        options={({route}) => ({
+          title: `${route.params.game.Group.name} Game`,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {fontSize: 18, fontWeight: 'bold'},
+          headerShown: true,
+          // headerRight: () => <Button title="Update count" />,
+        })}
+      />
+      <GamesRootStack.Screen
+        name="MakeTeamScreen"
+        component={MakeTeamScreen}
+        options={({route}) => ({
+          title: `${route.params.game.Group.name} Game teams`,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {fontSize: 18, fontWeight: 'bold'},
+          headerShown: true,
+          // headerRight: () => <Button title="Update count" />,
+        })}
       />
     </GamesRootStack.Navigator>
   );

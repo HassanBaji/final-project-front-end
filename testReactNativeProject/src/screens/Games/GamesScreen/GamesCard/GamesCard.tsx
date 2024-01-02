@@ -1,31 +1,42 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Pressable, Text, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {Game} from '../../../../Interfaces/interfaces';
+import {Game, Player} from '../../../../Interfaces/interfaces';
 import {useNavigation} from '@react-navigation/native';
 
 interface GamesCardProps {
   game: Game;
+  player: Player;
 }
-export const GamesCard = ({game}: GamesCardProps) => {
+export const GamesCard = ({game, player}: GamesCardProps) => {
   const navigation = useNavigation();
+
+  const isJoined = useMemo(() => {
+    return game.PlayerInGames.find(
+      gamePlayer => gamePlayer.player.id === player.id,
+    );
+  }, [game, player]);
+
   return (
     <Pressable
       style={{
         width: '100%',
         backgroundColor: '#FFF',
-        borderRadius: 16,
+        borderRadius: 8,
         marginTop: 2,
         shadowColor: '#c5c5c5',
-        shadowOpacity: 0.2,
-        marginBottom: 8,
-        borderWidth: 0.5,
+        shadowOpacity: 0.5,
+        marginBottom: 16,
+        borderWidth: isJoined ? 1 : 0.5,
         height: 200,
-        borderColor: '#c5c5c5',
+        borderColor: isJoined ? 'green' : '#c5c5c5',
+        shadowRadius: 1,
       }}
       onPress={() => {
-        navigation.navigate('GameDetailsScreen');
+        navigation.navigate('GamesDetailsScreen', {
+          game: game,
+        });
       }}>
       <View
         style={{
@@ -61,7 +72,7 @@ export const GamesCard = ({game}: GamesCardProps) => {
               style={{
                 textAlign: 'center',
                 fontSize: 18,
-                fontWeight: '500',
+                fontWeight: 'bold',
               }}>
               {game.Group.name}
             </Text>
@@ -74,12 +85,13 @@ export const GamesCard = ({game}: GamesCardProps) => {
             borderWidth: 1,
             borderRadius: 20,
             alignItems: 'flex-end',
+            backgroundColor: isJoined ? 'green' : 'transparent',
           }}
         />
       </View>
       <View style={{flexDirection: 'row'}}>
         <View>
-          <View style={{paddingHorizontal: 16, marginTop: 12}}>
+          <View style={{paddingHorizontal: 16, marginTop: 8}}>
             <Text
               style={{
                 fontSize: 12,
@@ -89,7 +101,7 @@ export const GamesCard = ({game}: GamesCardProps) => {
             </Text>
             <Text
               style={{
-                fontSize: 14,
+                fontSize: 18,
                 fontWeight: '500',
               }}>
               {game.date}
@@ -101,11 +113,11 @@ export const GamesCard = ({game}: GamesCardProps) => {
                 fontSize: 12,
                 fontWeight: '100',
               }}>
-              Time
+              Time start
             </Text>
             <Text
               style={{
-                fontSize: 14,
+                fontSize: 18,
                 fontWeight: '500',
               }}>
               {game.timeStart}
@@ -113,7 +125,7 @@ export const GamesCard = ({game}: GamesCardProps) => {
           </View>
         </View>
         <View>
-          <View style={{paddingHorizontal: 16, marginTop: 12}}>
+          <View style={{paddingHorizontal: 16, marginTop: 8}}>
             <Text
               style={{
                 fontSize: 12,
@@ -123,10 +135,10 @@ export const GamesCard = ({game}: GamesCardProps) => {
             </Text>
             <Text
               style={{
-                fontSize: 14,
+                fontSize: 18,
                 fontWeight: '500',
               }}>
-              {game.PlayerInGroup ? game.PlayerInGames.length ?? 0 : 0} Players
+              {game.PlayerInGames ? game.PlayerInGames.length ?? 0 : 0} Players
             </Text>
           </View>
           <View style={{paddingHorizontal: 16, marginTop: 12}}>
@@ -135,14 +147,14 @@ export const GamesCard = ({game}: GamesCardProps) => {
                 fontSize: 12,
                 fontWeight: '100',
               }}>
-              Time
+              Time finish
             </Text>
             <Text
               style={{
-                fontSize: 14,
+                fontSize: 18,
                 fontWeight: '500',
               }}>
-              {game.timeStart}
+              {game.timeFinish}
             </Text>
           </View>
         </View>

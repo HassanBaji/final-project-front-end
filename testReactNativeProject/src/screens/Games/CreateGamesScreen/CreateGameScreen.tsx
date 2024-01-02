@@ -26,6 +26,7 @@ export const CreateGameScreen = () => {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
   const [duration, setDuration] = useState(30);
+  const [limit, setLimit] = useState(0);
   const [openDate, setOpenDate] = useState(false);
   const [openTime, setOpenTime] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<Group>();
@@ -67,7 +68,7 @@ export const CreateGameScreen = () => {
 
   const onCreateButtonClick = async () => {
     try {
-      if (!location || !duration || !selectedGroup) {
+      if (!location || !duration || !selectedGroup || limit <= 0) {
         showToastNotCompleted();
       } else {
         setLoading(true);
@@ -80,6 +81,7 @@ export const CreateGameScreen = () => {
           timeFinish: timeFinishDate.toLocaleTimeString(),
           date: date.toDateString(),
           groupId: selectedGroup.id,
+          limit: limit,
         });
 
         refetchGroups();
@@ -256,6 +258,43 @@ export const CreateGameScreen = () => {
                 ]}
               />
             </View>
+          </View>
+
+          <View style={{marginTop: 12}}>
+            <Text>Players limit</Text>
+            <RNPickerSelect
+              onValueChange={value => setLimit(value)}
+              useNativeAndroidPickerStyle={false}
+              placeholder={{label: 'players limit'}}
+              style={{
+                inputIOS: {
+                  height: 40,
+                  borderWidth: 0.8,
+                  padding: 10,
+                  marginTop: 8,
+                  borderRadius: 8,
+                  borderColor: 'grey',
+                },
+                inputAndroid: {
+                  height: 40,
+                  borderWidth: 0.8,
+                  padding: 10,
+                  marginTop: 8,
+                  borderRadius: 8,
+                  borderColor: 'grey',
+                },
+              }}
+              items={[
+                {label: '10 players', value: 10},
+                {label: '12 players', value: 12},
+                {label: '14 players', value: 14},
+                {label: '16 players', value: 16},
+                {label: '18 players', value: 18},
+                {label: '20 players', value: 20},
+                {label: '22 players', value: 22},
+                {label: '24 players', value: 24},
+              ]}
+            />
           </View>
         </View>
       </View>

@@ -1,6 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useMemo} from 'react';
-import {ActivityIndicator, Pressable, Text, View} from 'react-native';
+import React, {useEffect, useMemo} from 'react';
+import {
+  ActivityIndicator,
+  Pressable,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 import {useGroups} from '../../../core/hooks/groups';
 import {usePlayerStore} from '../../../Store/PlayerStore';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -11,7 +17,11 @@ import {GamesCard} from './GamesCard/GamesCard';
 
 export const GamesScreen = () => {
   const {player} = usePlayerStore();
-  const {groups, isLoading} = useGroups(player ? player.id : '');
+  const {
+    groups,
+    isLoading,
+    refetch: refetchGroups,
+  } = useGroups(player ? player.id : '');
   const navigation = useNavigation();
 
   const games = useMemo(() => {
@@ -27,7 +37,7 @@ export const GamesScreen = () => {
   }, [groups]);
 
   return (
-    <View style={{backgroundColor: 'white', flex: 1}}>
+    <View style={{flex: 1}}>
       <View style={{margin: 16, marginTop: 124}}>
         <Text style={{fontSize: 24, fontWeight: 'bold'}}>Upcoming games</Text>
         {isLoading ? (
@@ -45,11 +55,21 @@ export const GamesScreen = () => {
           </View>
         ) : (
           <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={isLoading}
+                onRefresh={() => refetchGroups()}
+              />
+            }
             style={{marginTop: 14, marginBottom: 32}}
             showsVerticalScrollIndicator={false}>
             {groups &&
               groups.length > 0 &&
-              games.map(game => <GamesCard game={game} key={game.id} />)}
+              games &&
+              games.length > 0 &&
+              games.map(game => (
+                <GamesCard game={game} player={player} key={game.id} />
+              ))}
           </ScrollView>
         )}
       </View>

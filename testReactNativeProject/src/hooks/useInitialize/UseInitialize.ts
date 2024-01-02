@@ -6,8 +6,6 @@ export const UseInitialize = () => {
   const {player} = usePlayer();
   const {setPlayer} = usePlayerStore();
 
-  console.log('plauer ' + player);
-
   useEffect(() => {
     setPlayer(player);
   }, [player, setPlayer]);

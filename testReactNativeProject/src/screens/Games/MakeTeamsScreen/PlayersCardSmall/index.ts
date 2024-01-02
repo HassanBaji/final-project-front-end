@@ -1,0 +1,1 @@
+export {PlayersCardSmall} from './PlayersCardSmall';

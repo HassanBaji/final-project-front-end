@@ -1,17 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import {RefreshControl, Text, View} from 'react-native';
 import {useInvitesForPlayer} from '../../../core/hooks/Player';
 import {usePlayerStore} from '../../../Store/PlayerStore';
 import {InvitesCard} from './InvitesCard';
 import {acceptInviteForGroup} from '../../../core/actions/players';
 import Toast from 'react-native-toast-message';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export const NotificationScreen = () => {
   const {player} = usePlayerStore();
-  const {invites, refetch: refetchInvites} = useInvitesForPlayer(
-    player.id ?? '',
-  );
+  const {
+    invites,
+    refetch: refetchInvites,
+    isLoading,
+  } = useInvitesForPlayer(player.id ?? '');
   const [loading, setLoading] = useState(false);
 
   const showSuccessfulInviteToast = () => {
@@ -40,7 +43,14 @@ export const NotificationScreen = () => {
 
   return (
     <View style={{backgroundColor: '#FFF', flex: 1}}>
-      <View style={{margin: 16, marginTop: 124}}>
+      <ScrollView
+        style={{margin: 16, marginTop: 124}}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => refetchInvites()}
+          />
+        }>
         {invites &&
           invites.length > 0 &&
           invites.map(invite => (
@@ -52,7 +62,7 @@ export const NotificationScreen = () => {
               inviteId={invite.id}
             />
           ))}
-      </View>
+      </ScrollView>
     </View>
   );
 };

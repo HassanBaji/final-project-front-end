@@ -9,7 +9,7 @@ import React from 'react';
 
 import {Authenticator} from '@aws-amplify/ui-react-native';
 import {signUp, SignUpInput} from 'aws-amplify/auth';
-import {createPlayer, UseInitialize} from './src/hooks';
+import {createPlayer} from './src/hooks';
 import {NavigationContainer} from '@react-navigation/native';
 
 import {MainStack} from './src/navigation/MainStack';

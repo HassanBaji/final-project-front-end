@@ -61,8 +61,8 @@ export const GroupScreen = () => {
                     borderRadius: 16,
                     marginTop: 2,
                     shadowColor: '#c5c5c5',
-                    shadowOpacity: 0.2,
-                    marginBottom: 8,
+                    shadowOpacity: 0.5,
+                    marginBottom: 16,
                     borderWidth: 0.5,
                     borderColor: '#c5c5c5',
                   }}
@@ -88,7 +88,7 @@ export const GroupScreen = () => {
                           width: 70,
                           height: 70,
                           borderRadius: 50,
-                          borderWidth: 0.5,
+                          borderWidth: 0.2,
                           borderColor: '#bbbbbb',
                         }}
                         resizeMode={FastImage.resizeMode.contain}
@@ -106,7 +106,7 @@ export const GroupScreen = () => {
                         style={{
                           textAlign: 'center',
                           fontSize: 18,
-                          fontWeight: '500',
+                          fontWeight: 'bold',
                         }}>
                         {group.name}
                       </Text>
